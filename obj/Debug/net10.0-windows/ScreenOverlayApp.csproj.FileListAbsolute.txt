@@ -21,3 +21,4 @@ D:\Code\C# projects\ScreenOverlayApp\ScreenOverlayApp\obj\Debug\net10.0-windows\
 D:\Code\C# projects\ScreenOverlayApp\ScreenOverlayApp\obj\Debug\net10.0-windows\ScreenOv.A66538CD.Up2Date
 D:\Code\C# projects\ScreenOverlayApp\ScreenOverlayApp\obj\Debug\net10.0-windows\OverlayWindow.baml
 D:\Code\C# projects\ScreenOverlayApp\ScreenOverlayApp\obj\Debug\net10.0-windows\OverlayWindow.g.cs
+D:\Code\C# projects\ScreenOverlayApp\ScreenOverlayApp\obj\Debug\net10.0-windows\ScreenOverlayApp.sourcelink.json

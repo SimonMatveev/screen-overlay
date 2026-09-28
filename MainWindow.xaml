@@ -15,29 +15,29 @@
         <TextBlock Text="Мониторы:" FontWeight="Bold"/>
         <ItemsControl x:Name="MonitorsList"/>
 
-        <TextBlock Text="Хоткей:" Margin="0,10,0,0"/>
+        <TextBlock Text="Hotkey:" Margin="0,10,0,0"/>
         <TextBox x:Name="HotkeyBox"
                  Width="200"
                  Padding="4,3"
                  IsReadOnly="True"
                  Cursor="Hand"
-                 ToolTip="Кликните и нажмите новое сочетание"
+                 ToolTip="Сlick to select hotkey combination"
                  PreviewKeyDown="HotkeyBox_PreviewKeyDown"
                  GotFocus="HotkeyBox_GotFocus"
                  LostFocus="HotkeyBox_LostFocus"/>
         <TextBlock x:Name="HotkeyHint"
-                   Text="Кликните и нажмите сочетание клавиш"
+                   Text="Click to select hotkey combination"
                    FontSize="11"
-                   Foreground="Gray"
-                   Margin="0,2,0,0"/>
+                   Foreground="Gray" Width="278"
+                   />
 
         <CheckBox x:Name="AutoStartCheck"
-                  Content="Автозапуск с Windows"
+                  Content="Launch app on Windows startup"
                   Margin="0,10,0,0"
                   Checked="OnSettingChanged"
                   Unchecked="OnSettingChanged"/>
 
-        <Button Content="Переключить оверлей"
+        <Button Content="Toggle overlay"
             Click="OnToggleClick"
             Margin="0,15,0,0"/>
     </StackPanel>

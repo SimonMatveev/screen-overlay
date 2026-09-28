@@ -54,9 +54,13 @@ namespace ScreenOverlayApp
         {
             foreach (var screen in Screen.AllScreens)
             {
+                var name = MonitorInfo.GetFriendlyName(screen);
+                var resolution = $"{screen.Bounds.Width}x{screen.Bounds.Height}";
+
                 var checkbox = new Controls.CheckBox
                 {
-                    Content = screen.DeviceName,
+                    Content = $"{name} ({resolution})",
+                    Tag = screen.DeviceName,
                     IsChecked = settings.EnabledMonitors.Contains(screen.DeviceName),
                 };
 
@@ -86,7 +90,7 @@ namespace ScreenOverlayApp
             settings.EnabledMonitors = MonitorsList
                 .Items.Cast<Controls.CheckBox>()
                 .Where(c => c.IsChecked == true)
-                .Select(c => (string)c.Content)
+                .Select(c => (string)c.Tag!)
                 .ToList();
         }
 
