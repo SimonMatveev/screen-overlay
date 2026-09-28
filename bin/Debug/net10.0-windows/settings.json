@@ -1,0 +1,9 @@
+{
+  "EnabledMonitors": [
+    "\\\\.\\DISPLAY2",
+    "\\\\.\\DISPLAY3",
+    "\\\\.\\DISPLAY4"
+  ],
+  "Hotkey": "Ctrl\u002BShift\u002BX",
+  "AutoStart": true
+}
