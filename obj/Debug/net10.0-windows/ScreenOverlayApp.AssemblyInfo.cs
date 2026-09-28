@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ScreenOverlayApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2c22eb7ece125430282b7aa28f66d96ae825510")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d8786bbe3ba3191d983d8aae24d4d5f138da509")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScreenOverlayApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScreenOverlayApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
