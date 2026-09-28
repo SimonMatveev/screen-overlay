@@ -13,6 +13,9 @@ namespace ScreenOverlayApp
             ResizeMode = ResizeMode.NoResize;
             Topmost = true;
             ShowInTaskbar = false;
+            ShowActivated = false;
+            Focusable = false;
+            IsHitTestVisible = true;
             Background = System.Windows.Media.Brushes.Black;
 
             Left = left;

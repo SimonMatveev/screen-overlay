@@ -7,13 +7,45 @@ namespace ScreenOverlayApp.Services
 {
     public class OverlayService
     {
-        private List<OverlayWindow> overlays = new();
+        private readonly List<OverlayWindow> overlays = new();
+        private bool isActive;
 
-        public bool IsActive => overlays.Any();
+        public bool IsActive => isActive;
 
         public void Show(AppSettings settings)
         {
-            Hide();
+            isActive = true;
+            Rebuild(settings);
+        }
+
+        public void Hide()
+        {
+            isActive = false;
+            CloseAll();
+        }
+
+        public void Toggle(AppSettings settings)
+        {
+            if (isActive)
+                Hide();
+            else
+                Show(settings);
+        }
+
+        /// <summary>
+        /// Rebuilds visible overlays from current settings while the overlay stays armed.
+        /// </summary>
+        public void Refresh(AppSettings settings)
+        {
+            if (!isActive)
+                return;
+
+            Rebuild(settings);
+        }
+
+        private void Rebuild(AppSettings settings)
+        {
+            CloseAll();
 
             foreach (var screen in Screen.AllScreens)
             {
@@ -32,20 +64,21 @@ namespace ScreenOverlayApp.Services
             }
         }
 
-        public void Hide()
+        private void CloseAll()
         {
-            foreach (var o in overlays)
-                o.Close();
+            foreach (var overlay in overlays.ToList())
+            {
+                try
+                {
+                    overlay.Close();
+                }
+                catch
+                {
+                    // Ignore already-closed windows.
+                }
+            }
 
             overlays.Clear();
-        }
-
-        public void Toggle(AppSettings settings)
-        {
-            if (IsActive)
-                Hide();
-            else
-                Show(settings);
         }
     }
 }

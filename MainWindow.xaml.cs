@@ -77,12 +77,26 @@ namespace ScreenOverlayApp
                 return;
 
             SaveSettings(updateHotkey: false);
+
+            // Monitor checkboxes store DeviceName in Tag; AutoStart does not.
+            if (!overlayService.IsActive || sender is not Controls.CheckBox { Tag: string })
+                return;
+
+            // Defer rebuild so we don't close/recreate windows inside the checkbox event.
+            Dispatcher.BeginInvoke(() =>
+            {
+                overlayService.Refresh(settings);
+                Activate();
+            });
         }
 
         private void OnToggleClick(object sender, RoutedEventArgs e)
         {
             CollectMonitorSettings();
             overlayService.Toggle(settings);
+
+            if (overlayService.IsActive)
+                Activate();
         }
 
         private void CollectMonitorSettings()

@@ -1,6 +1,5 @@
 {
   "EnabledMonitors": [
-    "\\\\.\\DISPLAY2",
     "\\\\.\\DISPLAY3",
     "\\\\.\\DISPLAY4"
   ],
