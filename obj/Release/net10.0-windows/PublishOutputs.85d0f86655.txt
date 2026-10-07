@@ -1,5 +1,0 @@
-D:\Code\C# projects\ScreenOverlayApp\release\ScreenOverlayApp.exe
-D:\Code\C# projects\ScreenOverlayApp\release\ScreenOverlayApp.dll
-D:\Code\C# projects\ScreenOverlayApp\release\ScreenOverlayApp.deps.json
-D:\Code\C# projects\ScreenOverlayApp\release\ScreenOverlayApp.runtimeconfig.json
-D:\Code\C# projects\ScreenOverlayApp\release\ScreenOverlayApp.pdb
