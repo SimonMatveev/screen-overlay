@@ -89,16 +89,16 @@ namespace ScreenOverlayApp
             };
 
             var menu = new Forms.ContextMenuStrip();
-            menu.Items.Add("Открыть", null, (_, _) => ShowMainWindow());
+            menu.Items.Add("Open", null, (_, _) => ShowMainWindow());
             menu.Items.Add(
-                "Переключить оверлей",
+                "Toggle overlay",
                 null,
                 (_, _) =>
                 {
                     Dispatcher.Invoke(() => overlayService.Toggle(settings));
                 }
             );
-            menu.Items.Add("Выход", null, (_, _) => ExitApp());
+            menu.Items.Add("Exit", null, (_, _) => ExitApp());
 
             trayIcon.ContextMenuStrip = menu;
             trayIcon.DoubleClick += (_, _) => ShowMainWindow();

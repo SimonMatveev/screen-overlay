@@ -11,7 +11,7 @@ namespace ScreenOverlayApp
 {
     public partial class MainWindow : Window
     {
-        private const string HotkeyCapturePrompt = "Нажмите сочетание...";
+        private const string HotkeyCapturePrompt = "Press a key combination...";
 
         private AppSettings settings;
         private readonly OverlayService overlayService;
@@ -177,7 +177,7 @@ namespace ScreenOverlayApp
             );
             HotkeyBox.BorderThickness = new Thickness(2);
             HotkeyBox.Foreground = System.Windows.Media.Brushes.DimGray;
-            HotkeyHint.Text = "Ожидание нажатия клавиш...";
+            HotkeyHint.Text = "Waiting for key press...";
             HotkeyHint.Foreground = new SolidColorBrush(
                 System.Windows.Media.Color.FromRgb(180, 120, 0)
             );
@@ -209,7 +209,7 @@ namespace ScreenOverlayApp
             HotkeyBox.ClearValue(Controls.Control.BorderBrushProperty);
             HotkeyBox.ClearValue(Controls.Control.BorderThicknessProperty);
             HotkeyBox.ClearValue(Controls.Control.ForegroundProperty);
-            HotkeyHint.Text = "Кликните и нажмите сочетание клавиш";
+            HotkeyHint.Text = "Click to select hotkey combination";
             HotkeyHint.Foreground = System.Windows.Media.Brushes.Gray;
             HotkeyHint.FontWeight = FontWeights.Normal;
         }

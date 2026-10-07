@@ -21,13 +21,13 @@
                  Padding="4,3"
                  IsReadOnly="True"
                  Cursor="Hand"
-                 ToolTip="Сlick to select hotkey combination"
+                 ToolTip="Click to select hotkey combination"
                  PreviewMouseLeftButtonDown="HotkeyBox_PreviewMouseLeftButtonDown"
                  PreviewKeyDown="HotkeyBox_PreviewKeyDown"
                  GotFocus="HotkeyBox_GotFocus"
                  LostFocus="HotkeyBox_LostFocus"/>
         <TextBlock x:Name="HotkeyHint"
-                   Text="Сlick to select hotkey combination"
+                   Text="Click to select hotkey combination"
                    FontSize="11"
                    Foreground="Gray" Width="278"
                    />

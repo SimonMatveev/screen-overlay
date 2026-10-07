@@ -41,7 +41,7 @@ namespace ScreenOverlayApp.Services
             var device = screen.DeviceName;
             var slash = device.LastIndexOf('\\');
             var shortName = slash >= 0 ? device[(slash + 1)..] : device;
-            return screen.Primary ? $"{shortName} (основной)" : shortName;
+            return screen.Primary ? $"{shortName} (primary)" : shortName;
         }
 
         private static Dictionary<string, string> GetFriendlyNameMap()
