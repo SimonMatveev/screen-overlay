@@ -12,7 +12,7 @@
         Background="White">
 
     <StackPanel Margin="10">
-        <TextBlock Text="Мониторы:" FontWeight="Bold"/>
+        <TextBlock Text="Monitors:" FontWeight="Bold"/>
         <ItemsControl x:Name="MonitorsList"/>
 
         <TextBlock Text="Hotkey:" Margin="0,10,0,0"/>
@@ -22,11 +22,12 @@
                  IsReadOnly="True"
                  Cursor="Hand"
                  ToolTip="Сlick to select hotkey combination"
+                 PreviewMouseLeftButtonDown="HotkeyBox_PreviewMouseLeftButtonDown"
                  PreviewKeyDown="HotkeyBox_PreviewKeyDown"
                  GotFocus="HotkeyBox_GotFocus"
                  LostFocus="HotkeyBox_LostFocus"/>
         <TextBlock x:Name="HotkeyHint"
-                   Text="Click to select hotkey combination"
+                   Text="Сlick to select hotkey combination"
                    FontSize="11"
                    Foreground="Gray" Width="278"
                    />

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using ScreenOverlayApp.Models;
@@ -37,11 +38,31 @@ namespace ScreenOverlayApp
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
             settings = settingsService.Load();
 
+            // Keep the Run key in sync so older installs also get --minimized.
+            if (settings.AutoStart)
+                autostartService.SetEnabled(true);
+
+            var startMinimized = e.Args.Any(arg =>
+                string.Equals(arg, "--minimized", StringComparison.OrdinalIgnoreCase)
+            );
+
             mainWindow = new MainWindow(settings, overlayService);
             mainWindow.Closing += OnMainWindowClosing;
 
             InitTrayIcon();
-            mainWindow.Show();
+
+            if (startMinimized)
+            {
+                // Show once so Loaded/hotkeys initialize, then hide to tray without a flash.
+                mainWindow.ShowInTaskbar = false;
+                mainWindow.WindowState = WindowState.Minimized;
+                mainWindow.Show();
+                mainWindow.Hide();
+            }
+            else
+            {
+                mainWindow.Show();
+            }
         }
 
         public void PersistSettings(AppSettings updated)
@@ -99,6 +120,7 @@ namespace ScreenOverlayApp
                 if (mainWindow == null)
                     return;
 
+                mainWindow.ShowInTaskbar = true;
                 mainWindow.Show();
                 mainWindow.WindowState = WindowState.Normal;
                 mainWindow.Activate();

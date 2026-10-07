@@ -28,7 +28,7 @@ namespace ScreenOverlayApp.Services
                 if (string.IsNullOrWhiteSpace(exePath))
                     return;
 
-                key.SetValue(AppName, $"\"{exePath}\"");
+                key.SetValue(AppName, $"\"{exePath}\" --minimized");
             }
             else
             {

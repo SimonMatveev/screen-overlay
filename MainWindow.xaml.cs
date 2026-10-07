@@ -132,11 +132,41 @@ namespace ScreenOverlayApp
             }
         }
 
+        private void HotkeyBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Re-clicking an already-focused box does not raise GotFocus again.
+            if (!isCapturingHotkey)
+            {
+                BeginHotkeyCapture();
+                HotkeyBox.Focus();
+                e.Handled = true;
+            }
+        }
+
         private void HotkeyBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            BeginHotkeyCapture();
+        }
+
+        private void HotkeyBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!isCapturingHotkey)
+                return;
+
+            CancelHotkeyCapture();
+        }
+
+        private void BeginHotkeyCapture()
+        {
+            if (isCapturingHotkey)
+                return;
+
             isCapturingHotkey = true;
             hotkeyBeforeEdit =
                 HotkeyBox.Text == HotkeyCapturePrompt ? settings.Hotkey : HotkeyBox.Text;
+
+            // Release OS hotkey so the current combo reaches the text box instead of toggling overlay.
+            hotkeyService.Suspend();
 
             HotkeyBox.Text = HotkeyCapturePrompt;
             HotkeyBox.Background = new SolidColorBrush(
@@ -154,17 +184,23 @@ namespace ScreenOverlayApp
             HotkeyHint.FontWeight = FontWeights.SemiBold;
         }
 
-        private void HotkeyBox_LostFocus(object sender, RoutedEventArgs e)
+        private void CancelHotkeyCapture()
         {
-            if (!isCapturingHotkey)
-                return;
-
             isCapturingHotkey = false;
-
-            if (string.IsNullOrWhiteSpace(HotkeyBox.Text) || HotkeyBox.Text == HotkeyCapturePrompt)
-                HotkeyBox.Text = hotkeyBeforeEdit;
-
+            HotkeyBox.Text = string.IsNullOrWhiteSpace(hotkeyBeforeEdit)
+                ? settings.Hotkey
+                : hotkeyBeforeEdit;
             ResetHotkeyBoxAppearance();
+            hotkeyService.Resume();
+        }
+
+        private void CommitHotkeyCapture(string hotkey)
+        {
+            isCapturingHotkey = false;
+            HotkeyBox.Text = hotkey;
+            ResetHotkeyBoxAppearance();
+            SaveSettings(updateHotkey: true);
+            MoveFocusAwayFromHotkeyBox();
         }
 
         private void ResetHotkeyBoxAppearance()
@@ -178,8 +214,17 @@ namespace ScreenOverlayApp
             HotkeyHint.FontWeight = FontWeights.Normal;
         }
 
+        private void MoveFocusAwayFromHotkeyBox()
+        {
+            FocusManager.SetFocusedElement(this, this);
+            Keyboard.Focus(this);
+        }
+
         private void HotkeyBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            if (!isCapturingHotkey)
+                return;
+
             e.Handled = true;
 
             var modifiers = Keyboard.Modifiers;
@@ -187,8 +232,22 @@ namespace ScreenOverlayApp
 
             if (key == Key.Escape)
             {
-                HotkeyBox.Text = hotkeyBeforeEdit;
-                Keyboard.ClearFocus();
+                CancelHotkeyCapture();
+                MoveFocusAwayFromHotkeyBox();
+                return;
+            }
+
+            if (
+                key == Key.LeftCtrl
+                || key == Key.RightCtrl
+                || key == Key.LeftAlt
+                || key == Key.RightAlt
+                || key == Key.LeftShift
+                || key == Key.RightShift
+                || key == Key.LWin
+                || key == Key.RWin
+            )
+            {
                 return;
             }
 
@@ -203,24 +262,9 @@ namespace ScreenOverlayApp
             if (modifiers.HasFlag(ModifierKeys.Shift))
                 result += "Shift+";
 
-            if (
-                key == Key.LeftCtrl
-                || key == Key.RightCtrl
-                || key == Key.LeftAlt
-                || key == Key.RightAlt
-                || key == Key.LeftShift
-                || key == Key.RightShift
-            )
-            {
-                return;
-            }
-
             result += key.ToString();
 
-            HotkeyBox.Text = result;
-            HotkeyBox.Foreground = System.Windows.Media.Brushes.Black;
-            SaveSettings(updateHotkey: true);
-            Keyboard.ClearFocus();
+            CommitHotkeyCapture(result);
         }
     }
 }

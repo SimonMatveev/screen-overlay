@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Windows.Interop;
 using System.Windows;
+using System.Windows.Interop;
 
 namespace ScreenOverlayApp.Services
 {
@@ -13,46 +13,91 @@ namespace ScreenOverlayApp.Services
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        private const int HOTKEY_ID = 9000; 
-        private IntPtr _handle;
+        private const int HotkeyId = 9000;
+        private const int WmHotkey = 0x0312;
 
-        private bool _hookAdded = false;
+        private IntPtr _handle;
+        private bool _hookAdded;
+        private bool _isRegistered;
+        private string _currentHotkey = "";
+        private Action? _onHotkey;
 
         public void Register(Window window, string hotkey, Action onHotkey)
         {
             var helper = new WindowInteropHelper(window);
-            _handle = helper.Handle;
+            _handle = helper.EnsureHandle();
+            _onHotkey = onHotkey;
+            _currentHotkey = hotkey;
 
-            var (modifiers, key) = HotkeyParser.Parse(hotkey);
-
-            var source = HwndSource.FromHwnd(_handle);
+            if (!_hookAdded)
             {
-                if (!_hookAdded)
-                {
-                    source.AddHook((IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) =>
-                    {
-                        if (msg == 0x0312)
-                     {
-                         onHotkey();
-                         handled = true;
-                     }
-                     return IntPtr.Zero;
-                     });
-                    _hookAdded = true;
-
-                }
-                RegisterHotKey(_handle, HOTKEY_ID, modifiers, key);
+                var source = HwndSource.FromHwnd(_handle);
+                source?.AddHook(WndProc);
+                _hookAdded = true;
             }
+
+            ApplyRegistration();
         }
 
         public void UpdateHotkey(Window window, string hotkey, Action onHotkey)
         {
-            if (_handle != IntPtr.Zero)
+            _onHotkey = onHotkey;
+            _currentHotkey = hotkey;
+
+            if (_handle == IntPtr.Zero)
             {
-                UnregisterHotKey(_handle, HOTKEY_ID);
+                Register(window, hotkey, onHotkey);
+                return;
             }
 
-            Register(window, hotkey, onHotkey);
+            ApplyRegistration();
+        }
+
+        /// <summary>
+        /// Temporarily release the OS hotkey so the same combo can be typed into the capture field.
+        /// </summary>
+        public void Suspend()
+        {
+            UnregisterCurrent();
+        }
+
+        public void Resume()
+        {
+            ApplyRegistration();
+        }
+
+        private void ApplyRegistration()
+        {
+            UnregisterCurrent();
+
+            if (_handle == IntPtr.Zero || string.IsNullOrWhiteSpace(_currentHotkey))
+                return;
+
+            var (modifiers, key) = HotkeyParser.Parse(_currentHotkey);
+            if (key == 0)
+                return;
+
+            _isRegistered = RegisterHotKey(_handle, HotkeyId, modifiers, key);
+        }
+
+        private void UnregisterCurrent()
+        {
+            if (_handle == IntPtr.Zero || !_isRegistered)
+                return;
+
+            UnregisterHotKey(_handle, HotkeyId);
+            _isRegistered = false;
+        }
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == WmHotkey && wParam.ToInt32() == HotkeyId)
+            {
+                _onHotkey?.Invoke();
+                handled = true;
+            }
+
+            return IntPtr.Zero;
         }
     }
 }
