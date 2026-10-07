@@ -1,3 +1,3 @@
-<img width="279" height="290" alt="image" src="https://github.com/user-attachments/assets/762f9a7a-9c69-4982-a8aa-54ea4bda4416" />
+<img width="278" height="289" alt="image" src="https://github.com/user-attachments/assets/a21242da-ed08-41d4-b88a-723cbecd6815" />
 
 A small application for hiding additional monitors behind a black overlay (to avoid distractions).
